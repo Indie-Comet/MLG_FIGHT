@@ -9,7 +9,9 @@ public class MLG : MonoBehaviour {
 	public float Speed;
 	public Texture Deog;
 	public bool IsSnoopDog;
-	
+	bool IsWin = false;
+
+
 	public GUIStyle Style;
 	
 	void Start() {
@@ -38,6 +40,24 @@ public class MLG : MonoBehaviour {
 			}
 		}
 	}
+
+	Vector2 StartPosition;
+	float WinningTime;
+
+	void Update() {
+		if (IsWin) {
+			GameObject cam = GameObject.Find("Main Camera");
+			Vector2 cameraPos = new Vector2(cam.transform.position.x, cam.transform.position.y);
+			transform.position = Vector2.Lerp(StartPosition, cameraPos, Time.time - WinningTime);
+			Tex.transform.rotation = new Quaternion(0, 0, 0, 0);
+		}
+	}
+
+	void doWin() {
+		StartPosition = new Vector2 (transform.position.x, transform.position.y);
+		WinningTime = Time.time;
+		IsWin = true;
+	}
 	
 	void OnTriggerStay(Collider other) {
 		if (other.gameObject.tag == "Hero" && other.gameObject != gameObject) {
@@ -49,7 +69,9 @@ public class MLG : MonoBehaviour {
 			Tex.transform.rotation =  Quaternion.Lerp(Tex.transform.rotation, new Quaternion(0, 0, Random.value - 0.5F, Random.value), Time.time * Speed);
 		}
 		if (Hp <= 0) {
-			Application.LoadLevel("MLG_ULTIMATE");
+			other.gameObject.GetComponent<MLG>().doWin();
+			Destroy(gameObject);
+			//Application.LoadLevel("MLG_ULTIMATE");
 		}
 	}
 	
