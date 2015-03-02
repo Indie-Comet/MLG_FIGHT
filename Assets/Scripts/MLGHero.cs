@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MLG : MonoBehaviour {
+public class MLGHero : MonoBehaviour {
 	public int StartHp = 10;
 	public int Hp;
 	public GameObject Part;
@@ -9,7 +9,6 @@ public class MLG : MonoBehaviour {
 	public GameObject Tex;
 	public float Speed;
 	public Texture Deog;
-	public bool IsSnoopDog;
 	bool IsWin = false;
 	bool IsWinningPart = false;
 	bool IsGlasses = false;
@@ -17,8 +16,9 @@ public class MLG : MonoBehaviour {
 	public GameObject Opponent;
 	public GameObject Glasses;
 
+	public Rect HpBarPos;
+	public int HpInDoges;
 
-	public GUIStyle Style;
 	
 	void Start() {
 		Hp = StartHp;
@@ -28,24 +28,16 @@ public class MLG : MonoBehaviour {
 
 
 	void OnGUI() {
-		if (IsSnoopDog) {
-			int h = Screen.height;
-			h = h * 15 / 16;
-			int w = Screen.width;
-			int cnt = (10 * (Hp + (StartHp - 1) / 10)) / StartHp;
-			//Debug.Log(cnt);
-			for (int i = 0; i < cnt; i++) {
-				GUI.DrawTexture(new Rect(9 * w / 10, (10 - i - 1) * h / 10 + h / 20, w / 11, h / 10), Deog);
-			}
-		} else {
-			int h = Screen.height;
-			h = h * 15 / 16;
-			int w = Screen.width;
-			int cnt = (10 * (Hp + (StartHp - 1) / 10)) / StartHp;
-			//Debug.Log(cnt);
-			for (int i = 0; i < cnt; i++) {
-				GUI.DrawTexture(new Rect(w / 80, (10 - i - 1) * h / 10 + h / 20, w / 11, h / 10), Deog);
-			}
+		int h = Screen.height;
+		int w = Screen.width;
+		int cnt = (HpInDoges * (Hp + (StartHp - 1) / HpInDoges)) / StartHp;
+		for (int i = 0; i < cnt; i++) {
+			GUI.DrawTexture(new Rect(
+				w * HpBarPos.x,
+				HpBarPos.y * h + (HpInDoges - i - 1) * h * HpBarPos.height,
+				w * HpBarPos.width, 
+				h * HpBarPos.height
+			), Deog);
 		}
 	}
 
@@ -74,20 +66,19 @@ public class MLG : MonoBehaviour {
 					glassPosition.transform.position.x, 
 					glassPosition.transform.position.y
 				), 
-				(Time.time - explosionStartTime)
+				(Time.time - explosionStartTime) * 0.7F
 			);
 		}
 	}
 
 	void doLose() {
-		Opponent.GetComponent<MLG>().doWin();
+		Opponent.GetComponent<MLGHero>().doWin();
 		Destroy(gameObject);
 	}
 
 	void WinningExplosion() {
-		//Explode();
 		GameObject cam = GameObject.Find("Main Camera");
-		GlassesStartPosition = new Vector2 (cam.transform.position.x, cam.transform.position.y + 3);
+		GlassesStartPosition = new Vector2 (cam.transform.position.x, cam.transform.position.y + 7);
 		Glasses.transform.position = GlassesStartPosition;
 		IsGlasses = true;
 		WinPart.SetActive(true);
@@ -120,14 +111,12 @@ public class MLG : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter(Collider other) {
-		
 		if (other.gameObject.tag == "Hero" && other.gameObject != gameObject) {
 			Part.SetActive(true);
 		}
 	}
 	
 	void OnTriggerExit(Collider other) {
-		
 		if (other.gameObject.tag == "Hero" && other.gameObject != gameObject) {
 			Part.SetActive(false);
 			Tex.transform.rotation = new Quaternion(0, 0, 0, 0);
