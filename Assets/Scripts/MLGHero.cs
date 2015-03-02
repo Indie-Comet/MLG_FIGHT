@@ -2,30 +2,41 @@
 using System.Collections;
 
 public class MLGHero : MonoBehaviour {
-	public int StartHp = 10;
-	public int Hp;
-	public GameObject Part;
+	public ParticleSystem[] Parts;
 	public GameObject WinPart;
 	public GameObject Tex;
-	public float Speed;
-	public Texture Deog;
-	bool IsWin = false;
-	bool IsWinningPart = false;
-	bool IsGlasses = false;
+	public float RotationSpeed;
+	bool isFighting = false;
+	Vector3 partsPoint;
 
 	public GameObject Opponent;
+	public Transform GlassesPosition;
 	public GameObject Glasses;
 
+	public int StartHp = 10;
+	public int Hp;
 	public Rect HpBarPos;
+	public Texture Deog;
 	public int HpInDoges;
 
-	
 	void Start() {
 		Hp = StartHp;
-		Part.SetActive(false);
 		WinPart.SetActive(false);
 	}
 
+	void DoFight() {
+		Hp -= 10;
+		Tex.transform.rotation =  Quaternion.Lerp(Tex.transform.rotation, new Quaternion(0, 0, Random.value - 0.5F, Random.value), Time.time * RotationSpeed);
+		foreach (var i in Parts) {
+			i.transform.position = partsPoint;
+			if (Random.value < 0.5) i.Emit(1);
+		}
+	}
+	
+	void Update() {
+		if (isFighting)
+			DoFight();
+	}
 
 	void OnGUI() {
 		int h = Screen.height;
@@ -40,55 +51,51 @@ public class MLGHero : MonoBehaviour {
 			), Deog);
 		}
 	}
-
-	Vector2 StartPosition;
-	Vector2 GlassesStartPosition;
-	float WinningTime;
-	public GameObject glassPosition;
-	float explosionStartTime;
-
-	void Update() {
-		if (IsWin) {
-			GameObject cam = GameObject.Find("Main Camera");
-			Vector2 cameraPos = new Vector2(cam.transform.position.x, cam.transform.position.y);
-			transform.position = Vector2.Lerp(StartPosition, cameraPos, Time.time - WinningTime);
-			Tex.transform.rotation = new Quaternion(0, 0, 0, 0);
-		}
-		if (IsWinningPart && (WinningTime + 1 <= Time.time)) {
-			WinningExplosion ();
-			IsWinningPart = false;
-			explosionStartTime = Time.time;
-		}
-		if (IsGlasses) {
-			Glasses.transform.position = Vector2.Lerp(
-				GlassesStartPosition, 
-				new Vector2(
-					glassPosition.transform.position.x, 
-					glassPosition.transform.position.y
-				), 
-				(Time.time - explosionStartTime) * 0.7F
-			);
-		}
-	}
-
+	
 	void doLose() {
 		Opponent.GetComponent<MLGHero>().doWin();
 		Destroy(gameObject);
 	}
 
-	void WinningExplosion() {
+	IEnumerator PutGlasses() {
+		float pos = 0;
 		GameObject cam = GameObject.Find("Main Camera");
-		GlassesStartPosition = new Vector2 (cam.transform.position.x, cam.transform.position.y + 7);
-		Glasses.transform.position = GlassesStartPosition;
-		IsGlasses = true;
+		Vector2 begin = new Vector2 (cam.transform.position.x, cam.transform.position.y + 7);
+		Vector2 end = GlassesPosition.position;
+		while (pos < 1) {
+			Debug.DrawLine(begin, GlassesPosition.position, Color.red);
+			Glasses.transform.position = Vector3.Lerp(begin, end,	pos);
+			pos += Time.deltaTime;
+			yield return null;
+		}
+	}
+
+	IEnumerator WinningExplosion() {
+		yield return new WaitForSeconds(1);
+		StartCoroutine("PutGlasses");
 		WinPart.SetActive(true);
+		yield return new WaitForSeconds(5);
+		Application.LoadLevel("MLG_ULTIMATE");
+	}
+	
+	IEnumerator SlowMove() {
+		float pos = 0;
+		Vector3 start = transform.position;
+		GameObject cam = GameObject.Find("Main Camera");
+		Vector3 end = cam.transform.position;
+		end.z += 10;
+		while (true) {
+			transform.position = Vector3.Lerp(start, end, pos);
+			yield return null;
+			pos += Time.deltaTime;
+		}
 	}
 
 	void doWin() {
-		IsWinningPart = true;
-		StartPosition = new Vector2 (transform.position.x, transform.position.y);
-		WinningTime = Time.time;
-		IsWin = true;
+		isFighting = false;
+		Tex.transform.rotation = new Quaternion(0, 0, 0, 0);
+		StartCoroutine("WinningExplosion");
+		StartCoroutine("SlowMove");
 	}
 	
 	void OnTriggerStay(Collider other) {
@@ -98,28 +105,23 @@ public class MLGHero : MonoBehaviour {
 		if (other.gameObject.tag == "Hero" && other.gameObject != gameObject) {
 			Vector3 tmp = (other.gameObject.transform.position + transform.position) / 2;
 			tmp.z -= 5;
-			Part.transform.position = tmp;			
-			Hp -= 10;
-			
-			Tex.transform.rotation =  Quaternion.Lerp(Tex.transform.rotation, new Quaternion(0, 0, Random.value - 0.5F, Random.value), Time.time * Speed);
+			partsPoint = tmp;
 		}
 		if (Hp <= 0) {
-			Part.SetActive(false);
 			doLose();
-			//Application.LoadLevel("MLG_ULTIMATE");
 		}
 	}
 	
 	void OnTriggerEnter(Collider other) {
 		if (other.gameObject.tag == "Hero" && other.gameObject != gameObject) {
-			Part.SetActive(true);
+			isFighting = true;
 		}
 	}
 	
 	void OnTriggerExit(Collider other) {
 		if (other.gameObject.tag == "Hero" && other.gameObject != gameObject) {
-			Part.SetActive(false);
 			Tex.transform.rotation = new Quaternion(0, 0, 0, 0);
+			isFighting = false;
 		}
 	}
 }
