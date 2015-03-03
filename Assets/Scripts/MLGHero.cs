@@ -62,7 +62,7 @@ public class MLGHero : MonoBehaviour {
 		GameObject cam = GameObject.Find("Main Camera");
 		Vector2 begin = new Vector2 (cam.transform.position.x, cam.transform.position.y + 7);
 		Vector2 end = GlassesPosition.position;
-		while (pos < 1) {
+		while (true) {
 			Debug.DrawLine(begin, GlassesPosition.position, Color.red);
 			Glasses.transform.position = Vector3.Lerp(begin, end,	pos);
 			pos += Time.deltaTime;

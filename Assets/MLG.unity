@@ -4849,6 +4849,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 819675068}
   - 212: {fileID: 819675067}
+  - 95: {fileID: 819675069}
   m_Layer: 0
   m_Name: Texture
   m_TagString: Untagged
@@ -4876,7 +4877,7 @@ SpriteRenderer:
   m_ScaleInLightmap: 1
   m_SortingLayerID: 0
   m_SortingOrder: -20
-  m_Sprite: {fileID: 21300000, guid: 2ff83256867f00749aaad530008ef85f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 427256a1870adda4da06f10cffdf600c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!4 &819675068
 Transform:
@@ -4885,11 +4886,26 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 819675066}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .400000006, y: .150000006, z: -.00999999978}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -.0130000003, y: .150000006, z: -.00999999978}
+  m_LocalScale: {x: .550000012, y: .550000012, z: 1}
   m_Children: []
   m_Father: {fileID: 1921002644}
   m_RootOrder: 0
+--- !u!95 &819675069
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 819675066}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9cb8382038a44344c864ac1f6f593982, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 2
+  m_ApplyRootMotion: 1
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1 &851974901
 GameObject:
   m_ObjectHideFlags: 0
@@ -4912,7 +4928,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 851974901}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.0520000011, y: 1.20000005, z: 0}
+  m_LocalPosition: {x: -.00600000005, y: 1.17999995, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1921002644}
@@ -4963,7 +4979,7 @@ Transform:
   m_GameObject: {fileID: 990745811}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.80999994, y: 11.0600004, z: 0}
-  m_LocalScale: {x: .100000001, y: .100000001, z: .100000001}
+  m_LocalScale: {x: .0599999987, y: .0599999987, z: .100000001}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
@@ -6486,7 +6502,7 @@ MonoBehaviour:
   Parts: []
   WinPart: {fileID: 1067016483}
   Tex: {fileID: 1885582275}
-  RotationSpeed: .100000001
+  RotationSpeed: .0700000003
   Opponent: {fileID: 1921002639}
   GlassesPosition: {fileID: 1719293636}
   Glasses: {fileID: 990745811}
@@ -6549,7 +6565,7 @@ AudioSource:
   m_GameObject: {fileID: 1696206833}
   m_Enabled: 1
   serializedVersion: 3
-  m_audioClip: {fileID: 8300000, guid: e188bbbd074ffeb4dabec35c9a6674d7, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 5a6236f369ee46645a2aaaa8aa0656ab, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -6621,7 +6637,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1719293635}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.101999998, y: .898999989, z: 0}
+  m_LocalPosition: {x: -.0120000001, y: .908999979, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1595962068}
@@ -7012,7 +7028,7 @@ MonoBehaviour:
   - {fileID: 258757892}
   WinPart: {fileID: 1067016483}
   Tex: {fileID: 819675066}
-  RotationSpeed: .100000001
+  RotationSpeed: .0700000003
   Opponent: {fileID: 1595962063}
   GlassesPosition: {fileID: 851974902}
   Glasses: {fileID: 990745811}
