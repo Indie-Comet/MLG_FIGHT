@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class MLGHero : MonoBehaviour {
@@ -18,6 +18,9 @@ public class MLGHero : MonoBehaviour {
 	public Rect HpBarPos;
 	public Texture Deog;
 	public int HpInDoges;
+	public AudioSource Wow;
+	public AudioSource Boom;
+	public Animator Explosion;
 
 	void Start() {
 		Hp = StartHp;
@@ -57,6 +60,17 @@ public class MLGHero : MonoBehaviour {
 		Destroy(gameObject);
 	}
 
+	void doWow() {
+		Wow.Play();
+	}
+
+	public RuntimeAnimatorController ExplosionController;
+	void doExplosion() {
+		//Explosion.Play ("Explosion");
+		Explosion.runtimeAnimatorController = ExplosionController;
+		Boom.Play ();
+	}
+
 	IEnumerator PutGlasses() {
 		float pos = 0;
 		GameObject cam = GameObject.Find("Main Camera");
@@ -65,8 +79,15 @@ public class MLGHero : MonoBehaviour {
 		while (true) {
 			Debug.DrawLine(begin, GlassesPosition.position, Color.red);
 			Glasses.transform.position = Vector3.Lerp(begin, end,	pos);
+			float last_pos = pos;
 			pos += Time.deltaTime;
 			yield return null;
+			if (pos >= 2 && last_pos <= 2) {
+				doExplosion();
+			}
+			if (pos >= 1 && last_pos <= 1) {
+				doWow();
+			}
 		}
 	}
 
@@ -74,7 +95,7 @@ public class MLGHero : MonoBehaviour {
 		yield return new WaitForSeconds(1);
 		StartCoroutine("PutGlasses");
 		WinPart.SetActive(true);
-		yield return new WaitForSeconds(5);
+		yield return new WaitForSeconds (2.55F);
 		Application.LoadLevel("MLG_ULTIMATE");
 	}
 	
