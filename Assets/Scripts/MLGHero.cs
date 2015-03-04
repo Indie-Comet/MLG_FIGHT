@@ -64,7 +64,7 @@ public class MLGHero : MonoBehaviour {
 		Vector2 end = GlassesPosition.position;
 		while (true) {
 			Debug.DrawLine(begin, GlassesPosition.position, Color.red);
-			Glasses.transform.position = Vector3.Lerp(begin, end,	pos);
+			Glasses.transform.position = Vector3.Lerp(begin, end, Mathf.Min(1, pos));
 			pos += Time.deltaTime;
 			yield return null;
 		}

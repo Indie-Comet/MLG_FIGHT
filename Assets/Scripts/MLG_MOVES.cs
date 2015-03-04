@@ -8,6 +8,7 @@ public class MLG_MOVES : MonoBehaviour {
 	public float Speed;
 	public float Radius;
 	public TrailRenderer Trail;
+	public AudioSource Sound;
 	Vector2 begin;
 	Vector2 end;
 	float lastTime;
@@ -26,6 +27,7 @@ public class MLG_MOVES : MonoBehaviour {
 		begin += cameraPos;
 		end += cameraPos;		
 		nextTime = Time.time + (Random.value) * SonicMoveChance * 2 + SonicMoveChance;
+		Sound.Play();
 	}
 	
 
