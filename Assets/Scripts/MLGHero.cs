@@ -119,7 +119,7 @@ public class MLGHero : MonoBehaviour {
 		StartCoroutine("SlowMove");
 	}
 	
-	void OnTriggerStay(Collider other) {
+	void OnTriggerStay2D(Collider2D other) {
 		if (other.gameObject.tag == "Deadly shit" && other.gameObject != gameObject) {
 			doLose();
 		}
@@ -133,13 +133,13 @@ public class MLGHero : MonoBehaviour {
 		}
 	}
 	
-	void OnTriggerEnter(Collider other) {
+	void OnTriggerEnter2D(Collider2D other) {
 		if (other.gameObject.tag == "Hero" && other.gameObject != gameObject) {
 			isFighting = true;
 		}
 	}
 	
-	void OnTriggerExit(Collider other) {
+	void OnTriggerExit2D(Collider2D other) {
 		if (other.gameObject.tag == "Hero" && other.gameObject != gameObject) {
 			Tex.transform.rotation = new Quaternion(0, 0, 0, 0);
 			isFighting = false;
